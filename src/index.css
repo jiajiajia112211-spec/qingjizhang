@@ -27,6 +27,28 @@ select {
   font-size: 16px;
 }
 
+/* 去除移动端点击延迟与双击缩放判定，提升键盘/按钮触控响应 */
+button,
+a,
+input,
+textarea,
+select,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* 常驻动画元素提升为独立合成层，避免主线程重绘掉帧 */
+.gpu-layer {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* 弹层内部滚动：阻止滚动链传导到背景，手感更跟手 */
+.scroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* iOS 安全区工具类 */
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom);

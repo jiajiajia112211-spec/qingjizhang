@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { Check } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { CategoryIcon } from '../../constants/icons';
@@ -9,12 +10,17 @@ interface CategoryGridProps {
   onChange: (id: string) => void;
 }
 
-/** 分类九宫格（5 列），选中态放大并描边 */
-export function CategoryGrid({ type, value, onChange }: CategoryGridProps) {
-  const categories = useStore((s) => s.categories).filter((c) => c.type === type);
+/**
+ * 分类九宫格（5 列），选中态放大并描边。
+ * React.memo：输入金额（expr 变化）时 props 不变，整块跳过重渲染，保证键盘输入全程 60fps。
+ */
+export const CategoryGrid = memo(function CategoryGrid({ type, value, onChange }: CategoryGridProps) {
+  const all = useStore((s) => s.categories);
+  // 选择器返回稳定引用，filter 结果 memo 化，避免 store 任意变化触发的重复计算
+  const categories = useMemo(() => all.filter((c) => c.type === type), [all, type]);
 
   return (
-    <div className="no-scrollbar max-h-[172px] overflow-y-auto">
+    <div className="no-scrollbar scroll-contain max-h-[172px] overflow-y-auto">
       <div className="grid grid-cols-5 gap-y-2 px-2">
         {categories.map((c) => {
           const active = c.id === value;
@@ -52,4 +58,4 @@ export function CategoryGrid({ type, value, onChange }: CategoryGridProps) {
       </div>
     </div>
   );
-}
+});

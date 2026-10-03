@@ -153,6 +153,8 @@ export function StatsPage() {  const transactions = useStore((s) => s.transactio
                   fill="url(#gIncome)"
                   dot={false}
                   activeDot={{ r: 4 }}
+                  animationDuration={500}
+                  animationEasing="ease-out"
                 />
                 <Area
                   type="monotone"
@@ -163,6 +165,8 @@ export function StatsPage() {  const transactions = useStore((s) => s.transactio
                   fill="url(#gExpense)"
                   dot={false}
                   activeDot={{ r: 4 }}
+                  animationDuration={500}
+                  animationEasing="ease-out"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -192,6 +196,8 @@ export function StatsPage() {  const transactions = useStore((s) => s.transactio
                     outerRadius="94%"
                     paddingAngle={2}
                     strokeWidth={0}
+                    animationDuration={500}
+                    animationEasing="ease-out"
                   >
                     {pieData.map((d) => (
                       <Cell key={d.id} fill={catColor(d.id)} />

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { TabBar } from './components/layout/TabBar';
@@ -21,6 +21,14 @@ export default function App() {
   useTheme(); // 应用深色模式设置
   const location = useLocation();
   const isTabPage = TAB_PATHS.includes(location.pathname);
+
+  // 空闲时预加载统计页 chunk（Recharts 体积大），切到统计页不再有加载卡顿
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      import('./pages/StatsPage');
+    }, 2000);
+    return () => window.clearTimeout(t);
+  }, []);
 
   return (
     // 桌面端 430px 居中模拟手机预览

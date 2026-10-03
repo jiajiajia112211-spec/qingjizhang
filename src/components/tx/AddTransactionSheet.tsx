@@ -46,6 +46,21 @@ export function AddTransactionSheet() {
 
   const open = addSheet.open;
 
+  /**
+   * 预热：首次打开或页面空闲 2.5s 后常驻挂载（keepMounted）。
+   * 之后每次打开/关闭只播放动画，不再重新挂载整棵面板树，
+   * 消除「点 + 后首帧掉帧」的问题。
+   */
+  const [warm, setWarm] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setWarm(true);
+      return;
+    }
+    const t = window.setTimeout(() => setWarm(true), 2500);
+    return () => window.clearTimeout(t);
+  }, [open]);
+
   // 打开时初始化表单
   useEffect(() => {
     if (!open) return;
@@ -104,6 +119,11 @@ export function AddTransactionSheet() {
     };
 
     const s = useStore.getState();
+    try {
+      if ('vibrate' in navigator) navigator.vibrate(12);
+    } catch {
+      /* 忽略 */
+    }
     if (editing) {
       s.updateTransaction(editing.id, base);
       showToast('已更新');
@@ -143,7 +163,7 @@ export function AddTransactionSheet() {
 
   return (
     <>
-      <Sheet open={open} onClose={closeAdd} className="flex max-h-[92vh] flex-col">
+      <Sheet open={open} onClose={closeAdd} keepMounted={warm} className="flex max-h-[92vh] flex-col">
         {/* 头部：类型切换 + 关闭 */}
         <div className="flex items-center gap-3 px-4 pb-1">
           <SegmentedControl
@@ -161,7 +181,7 @@ export function AddTransactionSheet() {
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-2">
+        <div className="scroll-contain min-h-0 flex-1 overflow-y-auto px-4 pb-2">
           {type === 'transfer' ? (
             <div className="mt-2 overflow-hidden rounded-card bg-ios-bg dark:bg-ios-darkcard2">
               <button

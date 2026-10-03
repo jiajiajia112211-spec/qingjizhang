@@ -51,7 +51,7 @@ export function FilterSheet({ open, value, onChange, onClose }: FilterSheetProps
           </button>
         </div>
 
-        <div className="max-h-[62vh] space-y-4 overflow-y-auto px-4 pb-4">
+        <div className="scroll-contain max-h-[62vh] space-y-4 overflow-y-auto px-4 pb-4">
           {/* 类型 */}
           <div>
             <SectionTitle text="类型" />
