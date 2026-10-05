@@ -1,5 +1,4 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ChartPie, House, Plus, ReceiptText, Settings } from 'lucide-react';
 import { useUIStore } from '../../store/useUIStore';
 
@@ -21,16 +20,14 @@ export function TabBar() {
 
   return (
     <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2">
-      {/* 中央 "+" 悬浮按钮：用 calc 定位，避免 framer-motion transform 覆盖 -translate-x-1/2 */}
-      <motion.button
+      {/* 中央 "+" 悬浮按钮：用 calc 定位；按压反馈走 CSS transform（合成器） */}
+      <button
         aria-label="记一笔"
-        className="absolute -top-[18px] left-[calc(50%-27px)] z-10 flex h-[54px] w-[54px] items-center justify-center rounded-full border-4 border-ios-bg bg-ios-blue text-white shadow-lg shadow-ios-blue/30 dark:border-ios-darkbg"
-        whileTap={{ scale: 0.88 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 24 }}
+        className="absolute -top-[18px] left-[calc(50%-27px)] z-10 flex h-[54px] w-[54px] items-center justify-center rounded-full border-4 border-ios-bg bg-ios-blue text-white shadow-lg shadow-ios-blue/30 transition-transform duration-150 ease-out active:scale-90 dark:border-ios-darkbg"
         onClick={() => openAdd()}
       >
         <Plus className="h-7 w-7" strokeWidth={2.4} />
-      </motion.button>
+      </button>
 
       <div className="border-t-[0.5px] border-ios-separator bg-white/85 backdrop-blur-xl dark:border-ios-darkseparator dark:bg-[#1C1C1E]/85">
         <div className="flex h-[49px] pb-safe">

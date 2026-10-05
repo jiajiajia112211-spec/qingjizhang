@@ -13,7 +13,7 @@ export interface ToastMsg {
   action?: ToastAction;
 }
 
-interface AddSheetState {
+export interface AddSheetState {
   open: boolean;
   /** 编辑模式时传入交易 id */
   editingId: string | null;
