@@ -30,27 +30,32 @@ export function TabBar() {
       </button>
 
       <div className="border-t-[0.5px] border-ios-separator bg-white/85 backdrop-blur-xl dark:border-ios-darkseparator dark:bg-[#1C1C1E]/85">
-        <div className="flex h-[49px] pb-safe">
-          {TABS.map((tab, i) =>
-            tab === null ? (
-              <div key={i} className="flex-1" />
-            ) : (
-              <NavLink
-                key={tab.to}
-                to={tab.to}
-                className={({ isActive }) =>
-                  `no-select flex flex-1 flex-col items-center justify-center gap-[3px] active:opacity-60 ${
-                    isActive || (tab.to === '/' && location.pathname === '/')
-                      ? 'text-ios-blue'
-                      : 'text-ios-secondary dark:text-[#98989F]'
-                  }`
-                }
-              >
-                <tab.icon className="h-[22px] w-[22px]" strokeWidth={2} />
-                <span className="text-[10px] font-medium">{tab.label}</span>
-              </NavLink>
-            ),
-          )}
+        {/* 安全区 padding 加在 49px 内容之外：独立模式（添加到主屏幕）下
+            Home 指示条占据底部安全区，若 padding 挤占 49px 内部空间，
+            图标与文字会被裁切（box-sizing: border-box） */}
+        <div className="pb-safe">
+          <div className="flex h-[49px]">
+            {TABS.map((tab, i) =>
+              tab === null ? (
+                <div key={i} className="flex-1" />
+              ) : (
+                <NavLink
+                  key={tab.to}
+                  to={tab.to}
+                  className={({ isActive }) =>
+                    `no-select flex flex-1 flex-col items-center justify-center gap-[3px] active:opacity-60 ${
+                      isActive || (tab.to === '/' && location.pathname === '/')
+                        ? 'text-ios-blue'
+                        : 'text-ios-secondary dark:text-[#98989F]'
+                    }`
+                  }
+                >
+                  <tab.icon className="h-[22px] w-[22px]" strokeWidth={2} />
+                  <span className="text-[10px] font-medium">{tab.label}</span>
+                </NavLink>
+              ),
+            )}
+          </div>
         </div>
       </div>
     </nav>
